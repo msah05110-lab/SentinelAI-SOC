@@ -1,19 +1,15 @@
+from __future__ import annotations
+
 import uuid
 
-from sqlalchemy import String
-from sqlalchemy import Boolean
-from sqlalchemy import ForeignKey
+from sqlalchemy import Boolean, ForeignKey, String
 from sqlalchemy.dialects.postgresql import UUID
-
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import BaseModel
 
 
 class User(BaseModel):
-
     __tablename__ = "users"
 
     full_name: Mapped[str] = mapped_column(
@@ -35,15 +31,16 @@ class User(BaseModel):
 
     is_active: Mapped[bool] = mapped_column(
         Boolean,
-        default=True
+        default=True,
+        nullable=False
     )
 
     role_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
-        ForeignKey("roles.id")
+        ForeignKey("roles.id"),
+        nullable=False
     )
 
-    role = relationship(
-        "Role",
+    role: Mapped["Role"] = relationship(
         back_populates="users"
     )

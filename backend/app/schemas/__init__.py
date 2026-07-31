@@ -6,3 +6,4 @@ from app.schemas.user import (
 
 from app.schemas.login import UserLogin
 from app.schemas.token import Token, TokenPayload
+from app.schemas.upload import UploadResponse

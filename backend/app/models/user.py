@@ -44,3 +44,9 @@ class User(BaseModel):
     role: Mapped["Role"] = relationship(
         back_populates="users"
     )
+
+    # One User -> Many Uploaded Files
+    uploaded_files: Mapped[list["UploadedFile"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )

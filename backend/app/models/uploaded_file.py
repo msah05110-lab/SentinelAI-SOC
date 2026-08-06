@@ -1,69 +1,56 @@
-import uuid
-
 from sqlalchemy import (
-    Column,
     String,
     Integer,
-    DateTime,
     ForeignKey
 )
-from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import (
+    Mapped,
+    mapped_column,
+    relationship
+)
 
-from app.database.connection import Base
+from app.models.base import BaseModel
 
 
-class UploadedFile(Base):
+class UploadedFile(BaseModel):
     __tablename__ = "uploaded_files"
 
-    id = Column(
-        String,
-        primary_key=True,
-        default=lambda: str(uuid.uuid4())
-    )
-
-    original_filename = Column(
+    original_filename: Mapped[str] = mapped_column(
         String,
         nullable=False
     )
 
-    stored_filename = Column(
+    stored_filename: Mapped[str] = mapped_column(
         String,
         nullable=False,
         unique=True
     )
 
-    file_extension = Column(
+    file_extension: Mapped[str] = mapped_column(
         String,
         nullable=False
     )
 
-    file_size = Column(
+    file_size: Mapped[int] = mapped_column(
         Integer,
         nullable=False
     )
 
-    sha256_hash = Column(
+    sha256_hash: Mapped[str] = mapped_column(
         String,
         nullable=False,
         unique=True
     )
 
-    status = Column(
+    status: Mapped[str] = mapped_column(
         String,
         nullable=False,
         default="Uploaded"
     )
 
-    uploaded_by = Column(
-        String,
+    uploaded_by: Mapped[str] = mapped_column(
         ForeignKey("users.id"),
         nullable=False
-    )
-
-    uploaded_at = Column(
-        DateTime(timezone=True),
-        server_default=func.now()
     )
 
     user = relationship(

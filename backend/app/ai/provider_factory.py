@@ -5,11 +5,20 @@ from app.ai.ollama_provider import OllamaProvider
 class AIProviderFactory:
 
     @staticmethod
-    def get_provider(name: str):
+    def get_provider(
+        name: str
+    ):
 
-        providers = {
-            "openai": OpenAIProvider(),
-            "ollama": OllamaProvider(),
-        }
+        provider_name = (
+            name.strip().lower()
+        )
 
-        return providers[name.lower()]
+        if provider_name == "openai":
+            return OpenAIProvider()
+
+        if provider_name == "ollama":
+            return OllamaProvider()
+
+        raise ValueError(
+            f"Unsupported AI provider: {name}"
+        )

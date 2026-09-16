@@ -50,3 +50,9 @@ class User(BaseModel):
         back_populates="user",
         cascade="all, delete-orphan"
     )
+
+    # One User -> Many Incidents
+    incidents: Mapped[list["Incident"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )

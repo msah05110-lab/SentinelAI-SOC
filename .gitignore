@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Generated reports / logs
+backend/generated_reports/
+backend/*.log
+*.log
+
+# Node
+node_modules/
+frontend/node_modules/
+
+# Build files
+dist/
+build/
+frontend/dist/
+
+# Archives / temporary files
+*.zip
+*.rar
+*.7z
+
+# Old backups
+frontend_vite_old/
+
+# Accidental root Node files
+/package.json
+/package-lock.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp

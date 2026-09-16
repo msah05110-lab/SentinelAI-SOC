@@ -1,44 +1,92 @@
 from requests.exceptions import RequestException
 
 from app.clients.http_client import HTTPClient
-from app.core.config import VIRUSTOTAL_API_KEY
-from app.threat_intel.base_provider import BaseThreatProvider
+
+from app.core.config import (
+    VIRUSTOTAL_API_KEY
+)
+
+from app.threat_intel.base_provider import (
+    BaseThreatProvider
+)
+
+from app.threat_intel.normalizer import (
+    normalize_virustotal
+)
 
 
-class VirusTotalProvider(BaseThreatProvider):
+class VirusTotalProvider(
+    BaseThreatProvider
+):
 
-    BASE_URL = "https://www.virustotal.com/api/v3"
+    BASE_URL = (
+        "https://www.virustotal.com/api/v3"
+    )
 
-    def lookup(self, indicator: str):
 
-        # Check API Key
+    def lookup(
+        self,
+        indicator: str
+    ):
+
+        # ========================================================
+        # API KEY
+        # ========================================================
+
         if not VIRUSTOTAL_API_KEY:
+
             return {
                 "provider": "VirusTotal",
                 "indicator": indicator,
                 "status": "API Key Missing"
             }
 
+
+        # ========================================================
+        # REQUEST
+        # ========================================================
+
         headers = {
-            "x-apikey": VIRUSTOTAL_API_KEY
+            "x-apikey":
+                VIRUSTOTAL_API_KEY
         }
 
-        url = f"{self.BASE_URL}/ip_addresses/{indicator}"
+
+        url = (
+            f"{self.BASE_URL}"
+            f"/ip_addresses/{indicator}"
+        )
+
 
         try:
+
             data = HTTPClient.get(
                 url=url,
                 headers=headers
             )
 
+
+            # ====================================================
+            # NORMALIZE
+            # ====================================================
+
+            result = normalize_virustotal(
+                indicator=indicator,
+                response=data
+            )
+
+
+            # Convert Pydantic model
+            # into JSON-compatible dict.
+
             return {
-                "provider": "VirusTotal",
-                "indicator": indicator,
                 "status": "Success",
-                "data": data
+                **result.model_dump()
             }
 
+
         except RequestException as e:
+
             return {
                 "provider": "VirusTotal",
                 "indicator": indicator,
@@ -46,7 +94,9 @@ class VirusTotalProvider(BaseThreatProvider):
                 "error": str(e)
             }
 
+
         except Exception as e:
+
             return {
                 "provider": "VirusTotal",
                 "indicator": indicator,

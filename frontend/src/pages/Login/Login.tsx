@@ -1,108 +1,335 @@
 import { useState } from "react";
+
+import {
+    Alert,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    CircularProgress,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
+
+import {
+    Login as LoginIcon,
+    Security,
+} from "@mui/icons-material";
+
 import { useNavigate } from "react-router-dom";
 
 import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  TextField,
-  Typography,
-  Alert,
-} from "@mui/material";
+    login,
+} from "../../services/authService";
 
-import { login } from "../../services/authService";
-import { saveToken } from "../../utils/auth";
+import {
+    saveToken,
+} from "../../utils/auth";
+
 
 function Login() {
-  const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
+    const [email, setEmail] =
+        useState("");
 
-  const [error, setError] = useState("");
+    const [password, setPassword] =
+        useState("");
 
-  const handleLogin = async () => {
-    try {
-      setLoading(true);
-      setError("");
+    const [loading, setLoading] =
+        useState(false);
 
-      const response = await login(email, password);
+    const [error, setError] =
+        useState("");
 
-      saveToken(response.access_token);
 
-      navigate("/dashboard");
-    } catch (err) {
-      setError("Invalid email or password.");
-    } finally {
-      setLoading(false);
+    // ============================================================
+    // LOGIN
+    // ============================================================
+
+    async function handleLogin() {
+
+        setError("");
+
+        if (
+            !email.trim() ||
+            !password
+        ) {
+            setError(
+                "Please enter email and password."
+            );
+
+            return;
+        }
+
+        try {
+
+            setLoading(true);
+
+            const response =
+                await login(
+                    email.trim(),
+                    password
+                );
+
+            saveToken(
+                response.access_token
+            );
+
+            navigate(
+                "/dashboard",
+                {
+                    replace: true,
+                }
+            );
+
+        } catch (err: any) {
+
+            console.error(
+                "Login failed:",
+                err
+            );
+
+            const backendDetail =
+                err?.response?.data?.detail;
+
+            setError(
+                typeof backendDetail ===
+                    "string"
+                    ? backendDetail
+                    : "Invalid email or password."
+            );
+
+        } finally {
+
+            setLoading(false);
+
+        }
     }
-  };
 
-  return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      height="100vh"
-    >
-      <Card sx={{ width: 420, p: 2 }}>
-        <CardContent>
 
-          <Typography
-            variant="h4"
-            align="center"
-            gutterBottom
-          >
-            SentinelAI SOC
-          </Typography>
+    // ============================================================
+    // PAGE
+    // ============================================================
 
-          <Typography
-            align="center"
-            sx={{ mb: 3 }}
-          >
-            AI Powered Security Operations Center
-          </Typography>
+    return (
 
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {error}
-            </Alert>
-          )}
+        <Box
+            sx={{
+                minHeight: "100vh",
 
-          <TextField
-            label="Email"
-            fullWidth
-            margin="normal"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+                display: "flex",
 
-          <TextField
-            label="Password"
-            type="password"
-            fullWidth
-            margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+                alignItems: "center",
 
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{ mt: 3 }}
-            onClick={handleLogin}
-            disabled={loading}
-          >
-            {loading ? "Logging in..." : "Login"}
-          </Button>
+                justifyContent: "center",
 
-        </CardContent>
-      </Card>
-    </Box>
-  );
+                backgroundColor:
+                    "#0f172a",
+
+                p: 2,
+            }}
+        >
+
+            <Card
+                elevation={8}
+                sx={{
+                    width: "100%",
+                    maxWidth: 420,
+                    borderRadius: 3,
+                }}
+            >
+
+                <CardContent
+                    sx={{
+                        p: {
+                            xs: 3,
+                            sm: 4,
+                        },
+                    }}
+                >
+
+                    {/* ==================================================
+                        HEADER
+                    ================================================== */}
+
+                    <Box
+                        sx={{
+                            textAlign: "center",
+                            mb: 3,
+                        }}
+                    >
+
+                        <Security
+                            color="primary"
+                            sx={{
+                                fontSize: 42,
+                                mb: 1,
+                            }}
+                        />
+
+                        <Typography
+                            variant="h4"
+                            sx={{
+                                fontWeight: 700,
+                            }}
+                        >
+                            SentinelAI SOC
+                        </Typography>
+
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{
+                                mt: 0.5,
+                            }}
+                        >
+                            AI Powered Security Operations Center
+                        </Typography>
+
+                    </Box>
+
+
+                    {/* ==================================================
+                        ERROR
+                    ================================================== */}
+
+                    {error && (
+
+                        <Alert
+                            severity="error"
+                            sx={{
+                                mb: 2,
+                            }}
+                        >
+                            {error}
+                        </Alert>
+
+                    )}
+
+
+                    {/* ==================================================
+                        LOGIN FORM
+                    ================================================== */}
+
+                    <Stack spacing={2}>
+
+                        <TextField
+                            fullWidth
+                            type="email"
+                            label="Email"
+                            value={email}
+                            onChange={(event) =>
+                                setEmail(
+                                    event.target.value
+                                )
+                            }
+                            disabled={loading}
+                            autoComplete="email"
+                        />
+
+
+                        <TextField
+                            fullWidth
+                            type="password"
+                            label="Password"
+                            value={password}
+                            onChange={(event) =>
+                                setPassword(
+                                    event.target.value
+                                )
+                            }
+                            onKeyDown={(event) => {
+
+                                if (
+                                    event.key ===
+                                    "Enter"
+                                ) {
+                                    handleLogin();
+                                }
+
+                            }}
+                            disabled={loading}
+                            autoComplete="current-password"
+                        />
+
+
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            startIcon={
+                                loading ? (
+                                    <CircularProgress
+                                        size={18}
+                                        color="inherit"
+                                    />
+                                ) : (
+                                    <LoginIcon />
+                                )
+                            }
+                            disabled={loading}
+                            onClick={
+                                handleLogin
+                            }
+                        >
+                            {loading
+                                ? "Logging in..."
+                                : "Login"}
+                        </Button>
+
+                    </Stack>
+
+
+                    {/* ==================================================
+                        REGISTER
+                    ================================================== */}
+
+                    <Box
+                        sx={{
+                            mt: 3,
+                            pt: 2.5,
+                            borderTop: "1px solid",
+                            borderColor: "divider",
+                            textAlign: "center",
+                        }}
+                    >
+
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                        >
+                            Don't have an account?
+                        </Typography>
+
+
+                        <Button
+                            fullWidth
+                            variant="outlined"
+                            sx={{
+                                mt: 1,
+                            }}
+                            disabled={loading}
+                            onClick={() =>
+                                navigate(
+                                    "/register"
+                                )
+                            }
+                        >
+                            Create Account
+                        </Button>
+
+                    </Box>
+
+                </CardContent>
+
+            </Card>
+
+        </Box>
+    );
 }
+
 
 export default Login;

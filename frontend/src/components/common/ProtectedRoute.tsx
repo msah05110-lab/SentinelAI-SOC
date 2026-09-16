@@ -1,16 +1,17 @@
 import { Navigate } from "react-router-dom";
+import type { ReactNode } from "react";
 import { isAuthenticated } from "../../utils/auth";
 
 interface Props {
-  children: JSX.Element;
+    children: ReactNode;
 }
 
 function ProtectedRoute({ children }: Props) {
-  if (!isAuthenticated()) {
-    return <Navigate to="/" replace />;
-  }
+    if (!isAuthenticated()) {
+        return <Navigate to="/" replace />;
+    }
 
-  return children;
+    return <>{children}</>;
 }
 
 export default ProtectedRoute;

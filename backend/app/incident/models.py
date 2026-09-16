@@ -9,6 +9,8 @@ class IncidentAnalysis(BaseModel):
 
     mitre: list
 
+    risk_score: int
+
     severity: str
 
     ai_summary: str

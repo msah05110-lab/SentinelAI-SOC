@@ -9,15 +9,23 @@ class AIService:
         provider: str,
         iocs: dict,
         threats: list,
-        mitre: list
-    ):
+        mitre: list,
+        risk_score: int,
+        severity: str
+    ) -> str:
 
         prompt = build_incident_prompt(
-            iocs,
-            threats,
-            mitre
+            iocs=iocs,
+            threats=threats,
+            mitre=mitre,
+            risk_score=risk_score,
+            severity=severity
         )
 
-        ai = AIProviderFactory.get_provider(provider)
+        ai = AIProviderFactory.get_provider(
+            provider
+        )
 
-        return ai.generate(prompt)
+        return ai.generate(
+            prompt
+        )

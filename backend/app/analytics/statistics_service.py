@@ -10,7 +10,11 @@ class StatisticsService:
 
     def total_incidents(
         self,
-        db: Session
+        db: Session,
+        user_id
     ) -> int:
 
-        return self.repository.count(db)
+        return self.repository.count(
+            db,
+            user_id=user_id
+        )

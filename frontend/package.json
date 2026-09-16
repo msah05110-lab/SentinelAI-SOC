@@ -9,13 +9,15 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "typescript": "~6.0.2",
     "vite": "^8.2.0"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^9.2.0",
+    "@mui/icons-material": "^9.3.1",
     "@mui/material": "^9.2.0",
     "axios": "^1.19.0",
     "react-hook-form": "^7.84.0",

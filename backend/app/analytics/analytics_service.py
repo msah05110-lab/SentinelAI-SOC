@@ -12,31 +12,67 @@ class AnalyticsService:
         self.severity = SeverityService()
         self.trend = TrendService()
 
+    # ============================================================
+    # ANALYTICS SUMMARY
+    # ============================================================
+
     def summary(
         self,
-        db: Session
+        db: Session,
+        user_id
     ) -> dict:
 
         return {
-            "total": self.statistics.total_incidents(db),
-            "critical": self.severity.critical(db),
-            "high": self.severity.high(db),
-            "medium": self.severity.medium(db),
-            "low": self.severity.low(db)
+            "total": self.statistics.total_incidents(
+                db,
+                user_id=user_id
+            ),
+            "critical": self.severity.critical(
+                db,
+                user_id=user_id
+            ),
+            "high": self.severity.high(
+                db,
+                user_id=user_id
+            ),
+            "medium": self.severity.medium(
+                db,
+                user_id=user_id
+            ),
+            "low": self.severity.low(
+                db,
+                user_id=user_id
+            )
         }
+
+    # ============================================================
+    # RECENT INCIDENTS
+    # ============================================================
 
     def recent_incidents(
         self,
-        db: Session
+        db: Session,
+        user_id
     ) -> dict:
 
         return {
-            "incidents": self.trend.recent(db)
+            "incidents": self.trend.recent(
+                db,
+                user_id=user_id
+            )
         }
+
+    # ============================================================
+    # SEVERITY DISTRIBUTION
+    # ============================================================
 
     def severity_distribution(
         self,
-        db: Session
+        db: Session,
+        user_id
     ) -> dict:
 
-        return self.severity.distribution(db)
+        return self.severity.distribution(
+            db,
+            user_id=user_id
+        )

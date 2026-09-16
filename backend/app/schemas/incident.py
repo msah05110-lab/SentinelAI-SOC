@@ -11,6 +11,8 @@ class IncidentResponse(BaseModel):
 
     severity: str
 
+    risk_score: int
+
     ai_summary: str | None
 
     created_at: datetime

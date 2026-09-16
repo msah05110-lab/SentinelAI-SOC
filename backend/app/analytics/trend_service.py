@@ -8,11 +8,16 @@ class TrendService:
     def __init__(self):
         self.repository = IncidentRepository()
 
-    def recent(self, db: Session):
+    def recent(
+        self,
+        db: Session,
+        user_id
+    ):
 
         incidents = self.repository.get_recent(
             db,
-            limit=7
+            limit=7,
+            user_id=user_id
         )
 
         return [

@@ -10,52 +10,61 @@ class SeverityService:
 
     def critical(
         self,
-        db: Session
+        db: Session,
+        user_id
     ) -> int:
 
         return self.repository.count_by_severity(
             db,
-            "Critical"
+            "Critical",
+            user_id=user_id
         )
 
     def high(
         self,
-        db: Session
+        db: Session,
+        user_id
     ) -> int:
 
         return self.repository.count_by_severity(
             db,
-            "High"
+            "High",
+            user_id=user_id
         )
 
     def medium(
         self,
-        db: Session
+        db: Session,
+        user_id
     ) -> int:
 
         return self.repository.count_by_severity(
             db,
-            "Medium"
+            "Medium",
+            user_id=user_id
         )
 
     def low(
         self,
-        db: Session
+        db: Session,
+        user_id
     ) -> int:
 
         return self.repository.count_by_severity(
             db,
-            "Low"
+            "Low",
+            user_id=user_id
         )
 
     def distribution(
         self,
-        db: Session
+        db: Session,
+        user_id
     ) -> dict:
 
         return {
-            "critical": self.critical(db),
-            "high": self.high(db),
-            "medium": self.medium(db),
-            "low": self.low(db)
+            "critical": self.critical(db, user_id),
+            "high": self.high(db, user_id),
+            "medium": self.medium(db, user_id),
+            "low": self.low(db, user_id)
         }

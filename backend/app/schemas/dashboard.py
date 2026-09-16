@@ -15,4 +15,8 @@ class DashboardResponse(BaseModel):
 
     low: int
 
+    average_risk_score: float
+
+    highest_risk_score: int
+
     recent: list[IncidentResponse]
